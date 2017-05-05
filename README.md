@@ -1,2 +1,2 @@
 # golang-fb-api
-FaceBook api implementation in golang.
+Facebook api implementation in golang.
