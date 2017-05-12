@@ -1,13 +1,14 @@
-package fb
+package webhook
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"reflect"
+
+	"golang-fb-api/core"
 )
 
-// Change temp struct for storing dynamic data
 type Change struct {
 	json.RawMessage
 }
@@ -15,8 +16,8 @@ type Change struct {
 // TypedChange struct for storing dynamic data
 // with raw value and it`s type
 type TypedChange struct {
-	Field reflect.Type
-	Data  []byte
+	Type reflect.Type
+	Data []byte
 }
 
 // Entry struct contains incoming data from facebook
@@ -33,7 +34,7 @@ type Event struct {
 	Object string  `json:"object"`
 }
 
-func (e *Entry) getChanges() []TypedChange {
+func (e *Entry) GetChanges() []TypedChange {
 	changes := make([]TypedChange, 0)
 	var a = struct {
 		Field string `json:"field"`
@@ -43,7 +44,7 @@ func (e *Entry) getChanges() []TypedChange {
 		if string(rawValue) != "null" {
 			json.NewDecoder(bytes.NewBuffer(rawValue)).Decode(&a)
 			fmt.Println(a.Field)
-			changes = append(changes, TypedChange{Field: a.Field, Data: rawValue})
+			changes = append(changes, TypedChange{Type: core.UserTypesMap[a.Field], Data: rawValue})
 		}
 	}
 	return changes

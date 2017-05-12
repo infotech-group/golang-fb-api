@@ -1,4 +1,4 @@
-package fb
+package webhook
 
 import (
 	"testing"
