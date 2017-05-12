@@ -1,0 +1,7 @@
+package: golang-fb-api
+import:
+- package: github.com/gorilla/mux
+testImport:
+- package: github.com/stretchr/testify
+  subpackages:
+  - assert
