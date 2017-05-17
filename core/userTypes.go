@@ -1,47 +1,55 @@
 package core
 
-import "reflect"
+import (
+	"encoding/json"
+	"reflect"
+)
+
+var base = reflect.TypeOf(simpleBasicStruct{})
+var basePage = reflect.TypeOf(basePageStruct{})
 
 // UserTypesMap handles object types for creating
 // objects from incoming webhook calls from facebook
 var UserTypesMap = map[string]reflect.Type{
-	"about":      reflect.TypeOf(about{}),
-	"activities": reflect.TypeOf(activities{}),
-	"birthday":   reflect.TypeOf(birthday{}),
-	"books":      reflect.TypeOf(books{}),
-	"education":  reflect.TypeOf(education{}),
-	"email":      reflect.TypeOf(email{}),
-	"events":     reflect.TypeOf(events{}),
-	"feed":       reflect.TypeOf(feed{}),
-	"first_name": reflect.TypeOf(firstName{}),
-	"friends":    reflect.TypeOf(friends{}),
+	"about":       base,
+	"activities":  basePage,
+	"birthday":    base,
+	"books":       basePage,
+	"education":   reflect.TypeOf(education{}),
+	"email":       base,
+	"events":      reflect.TypeOf(events{}),
+	"feed":        reflect.TypeOf(feed{}),
+	"first_name":  base,
+	"friends":     reflect.TypeOf(friends{}),
+	"gender":      base,
+	"hometown":    basePage,
+	"last_name":   base,
+	"likes":       basePage,
+	"live_videos": reflect.TypeOf(live_videos{}),
+	"locale":      base,
+	"location":    basePage,
+	"movies":      basePage,
+	"music":       basePage,
+	"name":        reflect.TypeOf(name{}),
+	"photos":      reflect.TypeOf(photos{}),
+	"pic":         base,
+	"platform":    base,
+	"quotes":      base,
+	"religion":    base,
+	"status":      reflect.TypeOf(status{}),
+	"television":  basePage,
+	"videos":      reflect.TypeOf(live_videos{}),
+	"website":     base,
+	"work":        reflect.TypeOf(work{}),
 }
 
-type defaultStruct struct {
+type simpleBasicStruct struct {
 	Field string `json:"field"`
 	Value string `json:"value"`
 }
 
-type about struct {
-	defaultStruct
-}
-
-type activities struct {
+type basePageStruct struct {
 	Field string `json:"field"`
-	// TODO : make it as enum {add, change, edit, edited, delete, follow, hide, receive, remove, send, share, unhide, update}
-	Verb  string `json:"verb"`
-	Value struct {
-		Page string `json:"page"`
-	} `json:"value"`
-}
-
-type birthday struct {
-	defaultStruct
-}
-
-type books struct {
-	Field string `json:"field"`
-	// TODO : make it as enum {add, change, edit, edited, delete, follow, hide, receive, remove, send, share, unhide, update}
 	Verb  string `json:"verb"`
 	Value struct {
 		Page string `json:"page"`
@@ -53,16 +61,11 @@ type education struct {
 	Education []educationExperience `json:"value"`
 }
 
-type email struct {
-	defaultStruct
-}
-
 type events struct {
 	Field string `json:"field"`
 	Value struct {
 		EventID string `json:"event_id"`
-		// TODO : make it as enum {accept, create, decline, maybe, update}
-		Verb string `json:"verb"`
+		Verb    string `json:"verb"`
 	} `json:"value"`
 }
 
@@ -70,18 +73,48 @@ type feed struct {
 	Field string `json:"field"`
 }
 
-type firstName struct {
-	Field string `json:"field"`
-	Value string `json:"value"`
-}
-
 type friends struct {
 	Field string `json:"field"`
 	Value struct {
 		UUID string `json:"uuid"`
 	} `json:"value"`
-	//TODO : make it as enum {add, change, edit, edited, delete, follow, hide, receive, remove, send, share, unhide, update}
 	Verb string `json:"verb"`
+}
+
+type live_videos struct {
+	Field string `json:"field"`
+	Value struct {
+		ID     int64  `json:"id"`
+		Status string `json:"status"`
+	} `json:"value"`
+}
+
+type name struct {
+	Field          string          `json:"field"`
+	FirstName      string          `json:"first_name"`
+	LastName       string          `json:"last_name"`
+	MiddleName     string          `json:"middle_name"`
+	Value          string          `json:"value"`
+	LocalizedNames json.RawMessage `json:"localized_names"`
+}
+
+type photos struct {
+	Field string `json:"field"`
+	Value struct {
+		ObjectID string `json:"object_id"`
+		Verb     string `json:"verb"`
+	} `json:"value"`
+}
+
+type status struct {
+	ID    int64  `json:"id"`
+	Field string `json:"field"`
+	Value string `json:"value"`
+}
+
+type work struct {
+	Field string `json:"field"`
+	Value []WorkExperience
 }
 
 type educationExperience struct {
@@ -95,13 +128,15 @@ type educationExperience struct {
 	Field         string `json:"field"`
 }
 
-type Experience struct {
-	ID          string `json:"id"`
-	Description string `json:"description"`
-	From        User   `json:"from"`
-	Name        string `json:"name"`
-	With        []User `json:"with"`
-}
-
-type User struct {
+type WorkExperience struct {
+	ID          int64               `json:"id"`
+	Desctiption string              `json:"desctiption"`
+	Employer    Page                `json:"employer"`
+	EndDate     string              `json:"end_date"`
+	From        User                `json:"from"`
+	Location    Page                `json:"location"`
+	Position    Page                `json:"position"`
+	Projects    []ProjectExperience `json:"projects"`
+	StartDate   string              `json:"start_date"`
+	With        []User              `json:"with"`
 }

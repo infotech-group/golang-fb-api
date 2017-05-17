@@ -3,10 +3,10 @@ package webhook
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"reflect"
 
 	"golang-fb-api/core"
+	"strings"
 )
 
 type Change struct {
@@ -43,7 +43,9 @@ func (e *Entry) GetChanges() []TypedChange {
 		rawValue, _ := v.MarshalJSON()
 		if string(rawValue) != "null" {
 			json.NewDecoder(bytes.NewBuffer(rawValue)).Decode(&a)
-			fmt.Println(a.Field)
+			if a.Field == "pic" || strings.Contains(a.Field, "pic_") || a.Field == "picture" {
+				a.Field = "pic"
+			}
 			changes = append(changes, TypedChange{Type: core.UserTypesMap[a.Field], Data: rawValue})
 		}
 	}
