@@ -117,26 +117,4 @@ type work struct {
 	Value []WorkExperience
 }
 
-type educationExperience struct {
-	ID            string `json:"id"`
-	Classes       []Experience
-	Concentration []Page
-	Degree        Page
-	School        Page
-	With          []User
-	Year          Page
-	Field         string `json:"field"`
-}
 
-type WorkExperience struct {
-	ID          int64               `json:"id"`
-	Desctiption string              `json:"desctiption"`
-	Employer    Page                `json:"employer"`
-	EndDate     string              `json:"end_date"`
-	From        User                `json:"from"`
-	Location    Page                `json:"location"`
-	Position    Page                `json:"position"`
-	Projects    []ProjectExperience `json:"projects"`
-	StartDate   string              `json:"start_date"`
-	With        []User              `json:"with"`
-}
